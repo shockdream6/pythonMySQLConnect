@@ -1,0 +1,59 @@
+create table Doctor
+(
+  doctorID  int auto_increment
+    primary key,
+  firstName varchar(45) not null,
+  lastName  varchar(45) not null,
+  salary    varchar(45) null,
+  birthday  date        null
+);
+
+create table Patient
+(
+  patientID           int auto_increment,
+  firstName           varchar(45) not null,
+  lastName            varchar(45) not null,
+  insuranceTyp        varchar(45) null,
+  insurancePatientUID int         null,
+  birthDate           date        null,
+  sex                 varchar(10) null,
+  constraint patientID_UNIQUE
+  unique (patientID)
+);
+
+create table Cases
+(
+  casesID         int auto_increment
+    primary key,
+  caseName        varchar(50)   null,
+  caseDescription varchar(4096) null,
+  patientID       int           not null,
+  constraint patientID_UNIQUE
+  unique (patientID),
+  constraint fk_Cases_Patient1
+  foreign key (patientID) references Patient (patientid)
+);
+
+create index fk_Cases_Patient1_idx
+  on Cases (patientID);
+
+create table Cases_has_Doctor
+(
+  Cases_casesID   int not null,
+  Doctor_doctorID int not null,
+  primary key (Cases_casesID, Doctor_doctorID),
+  constraint fk_Cases_has_Doctor_Cases1
+  foreign key (Cases_casesID) references Cases (casesid),
+  constraint fk_Cases_has_Doctor_Doctor1
+  foreign key (Doctor_doctorID) references Doctor (doctorid)
+);
+
+create index fk_Cases_has_Doctor_Cases1_idx
+  on Cases_has_Doctor (Cases_casesID);
+
+create index fk_Cases_has_Doctor_Doctor1_idx
+  on Cases_has_Doctor (Doctor_doctorID);
+
+alter table Patient
+  add primary key (patientID);
+
